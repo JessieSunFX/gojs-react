@@ -7,6 +7,7 @@ import { produce } from 'immer';
 import * as React from 'react';
 
 import { DiagramWrapper } from './components/DiagramWrapper';
+import { PaletteWrapper } from './components/PaletteWrapper';
 import { SelectionInspector } from './components/SelectionInspector';
 
 import './App.css';
@@ -18,6 +19,7 @@ import './App.css';
  */
 interface AppState {
   nodeDataArray: Array<go.ObjectData>;
+  paletteNodeDataArray: Array<go.ObjectData>;
   linkDataArray: Array<go.ObjectData>;
   modelData: go.ObjectData;
   selectedData: go.ObjectData | null;
@@ -37,6 +39,12 @@ class App extends React.Component<{}, AppState> {
         { key: 1, text: 'Beta', color: 'orange', loc: '150 0' },
         { key: 2, text: 'Gamma', color: 'lightgreen', loc: '0 150' },
         { key: 3, text: 'Delta', color: 'pink', loc: '150 150' }
+      ],
+      paletteNodeDataArray: [
+        { key: 0, text: 'Alpha', color: 'lightblue' },
+        { key: 1, text: 'Beta', color: 'orange' },
+        { key: 2, text: 'Gamma', color: 'lightgreen' },
+        { key: 3, text: 'Delta', color: 'pink' }
       ],
       linkDataArray: [
         { key: -1, from: 0, to: 1 },
@@ -222,6 +230,7 @@ class App extends React.Component<{}, AppState> {
    * @param isBlur whether the input event was a blur, indicating the edit is complete
    */
   public handleInputChange(path: string, value: string, isBlur: boolean) {
+    console.log('handle inspector changes!!', path, value, isBlur)
     this.setState(
       produce((draft: AppState) => {
         const data = draft.selectedData as go.ObjectData;  // only reached if selectedData isn't null
@@ -277,6 +286,10 @@ class App extends React.Component<{}, AppState> {
         <p>
           Check out the <a href='https://gojs.net/latest/intro/react.html' target='_blank' rel='noopener noreferrer'>Intro page on using GoJS with React</a> for more information.
         </p>
+        <PaletteWrapper
+          nodeDataArray={this.state.paletteNodeDataArray}
+          modelData={this.state.modelData}
+        />
         <DiagramWrapper
           nodeDataArray={this.state.nodeDataArray}
           linkDataArray={this.state.linkDataArray}
